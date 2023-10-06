@@ -4,12 +4,16 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/main}">
 <body>
-<div layout:fragment="content" data-theme="fantasy">
-    <!-- Add content here -->
-    <div>Welcome to your Spring Boot with Thymeleaf project!</div>
-    <div>See <code>HELP.md</code> for instructions on how to get started.</div>
-    <button class="btn btn-primary">Primary</button>
+<div layout:fragment="content">
+<!--    <div id="dashboard" class="bg-gray-100 flex flex-col gap-8 max-w-xl border-4 border-double rounded-md p-2 sm:p-4  m-2 sm:m-4 font-base">-->
+        <h1 class="text-red-600">Jim's Daily Dashboard</h1>
 
+<!--        <div id="ipGeoTime" th:object="${ipGeoTime}" class="flex gap-2 flex-wrap text-gray-500 font-header">-->
+<!--            <h2 th:text="*{dateTime}" class="text-2xl font-bold">date time</h2>-->
+<!--            <p th:text="*{timezone}"></p>-->
+<!--        </div>-->
+
+<!--    </div>-->
 </div>
 <th:block layout:fragment="script-content">
     <!-- Add additional scripts there that are only needed for this page (Application wide scripts should be added in layout/main.html) --->
