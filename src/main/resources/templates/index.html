@@ -4,10 +4,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/main}">
 <body>
-<div layout:fragment="content">
+<div layout:fragment="content" data-theme="fantasy">
     <!-- Add content here -->
     <div>Welcome to your Spring Boot with Thymeleaf project!</div>
     <div>See <code>HELP.md</code> for instructions on how to get started.</div>
+    <button class="btn btn-primary">Primary</button>
+
 </div>
 <th:block layout:fragment="script-content">
     <!-- Add additional scripts there that are only needed for this page (Application wide scripts should be added in layout/main.html) --->
