@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+
+}
+[data-theme='forest'] {
+
+}
+[data-theme='fantasy'] {
+
+}
