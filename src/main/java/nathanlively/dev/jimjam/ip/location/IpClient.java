@@ -1,7 +1,6 @@
-package nathanlively.dev.jimjam.ip;
+package nathanlively.dev.jimjam.ip.location;
 
 import org.springframework.web.service.annotation.GetExchange;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface IpClient {

@@ -1,4 +1,4 @@
-package nathanlively.dev.jimjam.ip;
+package nathanlively.dev.jimjam.ip.location;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
