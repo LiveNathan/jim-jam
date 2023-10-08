@@ -14,9 +14,13 @@
                  class="flex items-baseline gap-2 flex-wrap text-gray-500 font-header">
                 <h2 th:text="|*{date} *{currentTime}|" class="text-2xl font-bold">date time</h2>
             </div>
-            <!--            <div class="flex gap-2 flex-wrap">-->
-            <!--                <p th:text="|week: ${ipGeoTime.week}|"></p>-->
-            <!--            </div>-->
+
+            <div id="location" th:object="${astronomy}" class="flex">
+                <span id="latitude" th:text="|*{location.latitude}º|"></span>
+                <span>,</span>
+                <span id="longitude" th:text="|*{location.longitude}º|"></span>
+            </div>
+
             <div id="sunDiv" th:object="${astronomy}" class="flex gap-2 flex-wrap">
 
                 <div class="text-primary">
@@ -85,18 +89,19 @@
 
             <div id="iss-info" class="grid grid-cols-2">
                 <div hx:get="@{/iss-location}" hx-trigger="load"></div>
+                <span id="iss-distance"></span>
                 <div hx:get="@{/iss-population}" hx-trigger="load"></div>
             </div>
         </div>
 
 
         <div id="hobis" class="flex flex-col gap-2">
-        <h2 class="text-2xl font-bold font-header text-gray-500">Hobis says</h2>
+            <h2 class="text-2xl font-bold font-header text-gray-500">Hobis says</h2>
 
-        <div class="">
-            <div hx:get="@{/hobis}" hx-trigger="load"></div>
+            <div class="">
+                <div hx:get="@{/hobis}" hx-trigger="load"></div>
+            </div>
         </div>
-    </div>
 
 
     </div>
@@ -112,52 +117,92 @@
     </label>
 </div>
 
-    <th:block layout:fragment="script-content">
-        <script type="text/javascript">
-            window.themeChange(false) // calling themeChange on page load without auto switch
+<th:block layout:fragment="script-content">
+    <script type="text/javascript">
+        window.themeChange(false) // calling themeChange on page load without auto switch
 
-            const themes = ['fantasy', 'forest'];
-            let currentTheme = 0;
-            document.getElementById('theme-checkbox').addEventListener('change', function () {
-                const nextTheme = themes[currentTheme];
-                document.documentElement.setAttribute('data-theme', nextTheme);
-                window.localStorage.setItem('theme', nextTheme);
-                currentTheme = currentTheme === themes.length - 1 ? 0 : currentTheme + 1;
+        const themes = ['fantasy', 'forest'];
+        let currentTheme = 0;
+        document.getElementById('theme-checkbox').addEventListener('change', function () {
+            const nextTheme = themes[currentTheme];
+            document.documentElement.setAttribute('data-theme', nextTheme);
+            window.localStorage.setItem('theme', nextTheme);
+            currentTheme = currentTheme === themes.length - 1 ? 0 : currentTheme + 1;
+        });
+    </script>
+
+    <script type="text/javascript">
+        window.onload = function () {
+            let uviSpan = document.getElementById('uvi');
+            let uvi = parseInt(uviSpan.textContent.replace('uvi', ''));  // Get the UVI value by removing "uvi" from the span's text content
+            let color = "text-status-neutral"; // Default color class for low UVI
+
+            if (uvi >= 3 && uvi < 6) {
+                color = "text-status-info";
+            } else if (uvi >= 6 && uvi < 8) {
+                color = "text-status-warning";
+            } else if (uvi >= 8 && uvi < 11) {
+                color = "text-status-danger";
+            } else if (uvi >= 11) {
+                color = "text-status-danger-dark";
+            }
+
+            document.getElementById('uvi').classList.add(color);
+        }
+    </script>
+
+    <script type="text/javascript">
+        window.onload = function () {
+            let dailyItems = document.querySelectorAll('[id^=time-]');  // Select all elements with ids starting with 'time-'
+            dailyItems.forEach(function (element) {
+                let timestamp = parseInt(element.innerText.trim());  // Get the timestamp
+                let date = new Date(timestamp * 1000);  // Convert to JavaScript Date object
+                element.textContent = date.toLocaleDateString('en-US', {weekday: 'short'});  // Display as abbreviated weekday
             });
-        </script>
+        }
+    </script>
 
-        <script type="text/javascript">
-            window.onload = function () {
-                let uviSpan = document.getElementById('uvi');
-                let uvi = parseInt(uviSpan.textContent.replace('uvi', ''));  // Get the UVI value by removing "uvi" from the span's text content
-                let color = "text-status-neutral"; // Default color class for low UVI
+    <script type="text/javascript">
+        document.body.addEventListener('htmx:afterOnLoad', function() {
+            const userLatSpan = document.getElementById('latitude');
+            const issLatSpan = document.getElementById('iss-latitude');
+            const userLonSpan = document.getElementById('longitude');
+            const issLonSpan = document.getElementById('iss-longitude');
+            const userLat = parseInt(userLatSpan.textContent.replace('º', ''));
+            const issLat = parseInt(issLatSpan.textContent.replace('º', ''));
+            const userLon = parseInt(userLonSpan.textContent.replace('º', ''));
+            const issLon = parseInt(issLonSpan.textContent.replace('º', ''));
+            // console.log(userLat, issLat, userLon, issLon)
 
-                if (uvi >= 3 && uvi < 6) {
-                    color = "text-status-info";
-                } else if (uvi >= 6 && uvi < 8) {
-                    color = "text-status-warning";
-                } else if (uvi >= 8 && uvi < 11) {
-                    color = "text-status-danger";
-                } else if (uvi >= 11) {
-                    color = "text-status-danger-dark";
-                }
+            const distance = getDistanceFromLatLonInKm(userLat, userLon, issLat, issLon);
+            const distanceText = Math.round(distance) + "km away";
 
-                document.getElementById('uvi').classList.add(color);
-            }
-        </script>
-
-        <script type="text/javascript">
-            window.onload = function() {
-                let dailyItems = document.querySelectorAll('[id^=time-]');  // Select all elements with ids starting with 'time-'
-                dailyItems.forEach(function(element) {
-                    let timestamp = parseInt(element.innerText.trim());  // Get the timestamp
-                    let date = new Date(timestamp * 1000);  // Convert to JavaScript Date object
-                    element.textContent = date.toLocaleDateString('en-US', {weekday: 'short'});  // Display as abbreviated weekday
-                });
-            }
-        </script>
+            const distanceSpan = document.getElementById('iss-distance');
+            distanceSpan.innerText = distanceText;
+        })
 
 
-    </th:block>
+        function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Radius of the earth in km
+            const dLat = deg2rad(lat2 - lat1); // deg2rad below
+            const dLon = deg2rad(lon2 - lon1);
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(deg2rad(lat1)) *
+                Math.cos(deg2rad(lat2)) *
+                Math.sin(dLon / 2) *
+                Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            return R * c;  // Distance in km
+        }
+
+        function deg2rad(deg) {
+            return deg * (Math.PI / 180);
+        }
+    </script>
+
+
+</th:block>
 </body>
 </html>
