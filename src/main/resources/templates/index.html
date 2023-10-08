@@ -51,12 +51,18 @@
 
         <div id="weather" th:object="${weather}" class="flex flex-col">
 
-            <h2 class="text-2xl font-bold">Weather</h2>
+            <h2 class="text-2xl font-bold font-header text-gray-500">Weather</h2>
 
-            <div id="current-weather" class="flex gap-2 flex-wrap">
-                <p th:text="|*{current.temp}ºF|"></p>
+            <div id="current-weather" class="grid grid-cols-2">
+                <span th:text="|*{current.temp}ºF|"></span>
+                <span th:text="|Feels like: *{current.feelsLike}ºF|"></span>
+                <span th:text="|*{current.weather.get(0).description}|"></span>
+                <span th:text="|*{current.pressure}hPa|"></span>
+                <span th:text="|*{current.humidity}%|"></span>
+                <span th:text="|DP: *{current.dewPoint}ºF|"></span>
+                <span id="uvi" th:text="|*{current.uvi}uvi|"></span>
+                <span th:text="|*{current.windSpeed}mph from *{current.windDeg}º|"></span>
             </div>
-
 
         </div>
 
@@ -84,6 +90,26 @@
             window.localStorage.setItem('theme', nextTheme);
             currentTheme = currentTheme === themes.length - 1 ? 0 : currentTheme + 1;
         });
+    </script>
+
+    <script type="text/javascript">
+        window.onload = function() {
+            let uviSpan = document.getElementById('uvi');
+            let uvi = parseInt(uviSpan.textContent.replace('uvi', ''));  // Get the UVI value by removing "uvi" from the span's text content
+            let color = "text-status-neutral"; // Default color class for low UVI
+
+            if (uvi >= 3 && uvi < 6) {
+                color = "text-status-info";
+            } else if (uvi >= 6 && uvi < 8) {
+                color = "text-status-warning";
+            } else if (uvi >= 8 && uvi < 11) {
+                color = "text-status-danger";
+            } else if (uvi >= 11) {
+                color = "text-status-danger-dark";
+            }
+
+            document.getElementById('uvi').classList.add(color);
+        }
     </script>
 </th:block>
 </body>

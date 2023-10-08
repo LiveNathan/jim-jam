@@ -1,33 +1,21 @@
-package nathanlively.dev.jimjam.ip.weather;
+package nathanlively.dev.jimjam.weather;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record DailyItem(
-
-	@JsonProperty("moonset")
-	int moonset,
-
-	@JsonProperty("summary")
-	String summary,
-
-	@JsonProperty("rain")
-	Object rain,
+public record Current(
 
 	@JsonProperty("sunrise")
 	int sunrise,
 
 	@JsonProperty("temp")
-	Temp temp,
+	int temp,
 
-	@JsonProperty("moon_phase")
-	Object moonPhase,
+	@JsonProperty("visibility")
+	int visibility,
 
 	@JsonProperty("uvi")
-	Object uvi,
-
-	@JsonProperty("moonrise")
-	int moonrise,
+	int uvi,
 
 	@JsonProperty("pressure")
 	int pressure,
@@ -36,16 +24,13 @@ public record DailyItem(
 	int clouds,
 
 	@JsonProperty("feels_like")
-	FeelsLike feelsLike,
+	Object feelsLike,
 
 	@JsonProperty("wind_gust")
 	Object windGust,
 
 	@JsonProperty("dt")
 	int dt,
-
-	@JsonProperty("pop")
-	Object pop,
 
 	@JsonProperty("wind_deg")
 	int windDeg,

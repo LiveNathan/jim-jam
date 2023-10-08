@@ -1,4 +1,4 @@
-package nathanlively.dev.jimjam.ip.weather;
+package nathanlively.dev.jimjam.weather;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;

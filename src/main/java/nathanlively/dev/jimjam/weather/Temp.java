@@ -1,8 +1,14 @@
-package nathanlively.dev.jimjam.ip.weather;
+package nathanlively.dev.jimjam.weather;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record FeelsLike(
+public record Temp(
+
+	@JsonProperty("min")
+	Object min,
+
+	@JsonProperty("max")
+	Object max,
 
 	@JsonProperty("eve")
 	Object eve,

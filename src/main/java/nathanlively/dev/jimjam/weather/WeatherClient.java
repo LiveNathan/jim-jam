@@ -1,6 +1,5 @@
-package nathanlively.dev.jimjam.ip.weather;
+package nathanlively.dev.jimjam.weather;
 
-import nathanlively.dev.jimjam.ip.location.IpGeoLocationResponse;
 import org.springframework.web.service.annotation.GetExchange;
 import reactor.core.publisher.Mono;
 
