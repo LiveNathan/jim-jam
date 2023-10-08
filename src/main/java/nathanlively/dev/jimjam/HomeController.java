@@ -1,8 +1,12 @@
 package nathanlively.dev.jimjam;
 
+import io.github.wimdeblauwe.hsbt.mvc.HxRequest;
 import lombok.RequiredArgsConstructor;
 import nathanlively.dev.jimjam.ip.astronomy.AstronomyResponse;
 import nathanlively.dev.jimjam.ip.IpGeoLocationService;
+import nathanlively.dev.jimjam.iss.IssService;
+import nathanlively.dev.jimjam.iss.location.IssLocationResponse;
+import nathanlively.dev.jimjam.iss.pop.IssPopResponse;
 import nathanlively.dev.jimjam.weather.WeatherResponse;
 import nathanlively.dev.jimjam.weather.WeatherService;
 import org.springframework.stereotype.Controller;
@@ -18,6 +22,7 @@ public class HomeController {
 
     private final IpGeoLocationService ipGeoLocationService;
     private final WeatherService weatherService;
+    private final IssService issService;
 
     @GetMapping
     public String index(Model model) {
@@ -38,6 +43,22 @@ public class HomeController {
                 .block();
 
         return "index";
+    }
+
+    @HxRequest
+    @GetMapping("iss-location")
+    public String issLocation(Model model) {
+        Mono<IssLocationResponse> issLocationResponseMono = issService.getLocation();
+        model.addAttribute("issLocation", issLocationResponseMono.block());
+        return "iss-fragments :: issLocation";
+    }
+
+    @HxRequest
+    @GetMapping("iss-population")
+    public String issPopulation(Model model) {
+        Mono<IssPopResponse> issPopResponseMono = issService.getPopulation();
+        model.addAttribute("issPop", issPopResponseMono.block());
+        return "iss-fragments :: issPopulation";
     }
 
 }

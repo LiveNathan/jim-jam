@@ -2,6 +2,8 @@ package nathanlively.dev.jimjam.iss;
 
 import nathanlively.dev.jimjam.ip.astronomy.AstronomyResponse;
 import nathanlively.dev.jimjam.ip.location.IpGeoLocationResponse;
+import nathanlively.dev.jimjam.iss.location.IssLocationResponse;
+import nathanlively.dev.jimjam.iss.pop.IssPopResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,22 +20,22 @@ public class IssService {
                 .build();
     }
 
-    public Mono<IpGeoLocationResponse> getLocation() {
+    public Mono<IssLocationResponse> getLocation() {
         return this.webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/iss-now.json")
                         .build())
                 .retrieve()
-                .bodyToMono(IpGeoLocationResponse.class);
+                .bodyToMono(IssLocationResponse.class);
     }
 
-    public Mono<AstronomyResponse> getPopulation() {
+    public Mono<IssPopResponse> getPopulation() {
         return this.webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/astros.json")
                         .build())
                 .retrieve()
-                .bodyToMono(AstronomyResponse.class);
+                .bodyToMono(IssPopResponse.class);
     }
 }
 
