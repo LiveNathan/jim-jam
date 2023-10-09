@@ -13,7 +13,7 @@ public class WeatherService {
     @Value("${weather.apikey}")
     private String weatherKey;
 
-    public WeatherService(@Value("${weather.apikey}") String weatherKey) {
+    public WeatherService() {
         this.webClient = WebClient.builder()
                 .baseUrl("https://api.openweathermap.org/data/3.0/onecall")
                 .build();

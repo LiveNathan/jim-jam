@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import reactor.core.publisher.Mono;
 import java.time.*;
 
@@ -37,8 +38,13 @@ public class HomeController {
     private final IssService issService;
 
     @GetMapping
-    public String index(Model model) {
-        Mono<AstronomyResponse> astronomyResponseMono = ipGeoLocationService.getAstronomy();
+    public String index() {
+        return "index";
+    }
+
+    @GetMapping("astronomy")
+    public String astronomy(Model model, @RequestParam String ip) {
+        Mono<AstronomyResponse> astronomyResponseMono = ipGeoLocationService.getAstronomy(ip);
 
         Mono<WeatherResponse> weatherResponseMono = astronomyResponseMono.flatMap(astronomyResponse -> {
             float lat = astronomyResponse.location().latitude();
@@ -54,7 +60,7 @@ public class HomeController {
                 })
                 .block();
 
-        return "index";
+        return "dashboard";
     }
 
     @HxRequest

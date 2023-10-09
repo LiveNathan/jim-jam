@@ -13,9 +13,9 @@ public class IpGeoLocationService {
     private final WebClient webClient;
 
     @Value("${ipgeolocation.apikey}")
-    private String apiKey;;
+    private String apiKey;
 
-    public IpGeoLocationService(@Value("${weather.apikey}") String weatherKey) {
+    public IpGeoLocationService() {
         this.webClient = WebClient.builder()
                 .baseUrl("https://api.ipgeolocation.io")
                 .build();
@@ -31,11 +31,12 @@ public class IpGeoLocationService {
                 .bodyToMono(IpGeoLocationResponse.class);
     }
 
-    public Mono<AstronomyResponse> getAstronomy() {
+    public Mono<AstronomyResponse> getAstronomy(String ip) {
         return this.webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/astronomy")
                         .queryParam("apiKey", apiKey)
+                        .queryParam("ip", ip)
                         .build())
                 .retrieve()
                 .bodyToMono(AstronomyResponse.class);
